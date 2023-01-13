@@ -5,6 +5,7 @@ import { CommonComponent } from 'src/app/Models/CommonComponent/CommonComponent.
 import { CurrentRouteService } from 'src/app/Services/CurrentRoute/current-route.service';
 import { AuthorizationService } from 'src/app/Services/Auth/authorization.service';
 import { Route } from 'src/app/Models/Route';
+import { User } from 'src/app/Models/Backend/User';
 @Component({
   selector: 'app-header',
   templateUrl: './header.component.html',
@@ -18,10 +19,12 @@ export class HeaderComponent extends CommonComponent implements OnInit {
   });
   home: string = ConstService.home;
   profile: string = ConstService.profile;
-
+  user: User;
   @Input() extraRutes: Array<Route>;
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+    this.user = this.authorizationService.user;
+  }
 
   constructor(
     private _formBuilder: FormBuilder,

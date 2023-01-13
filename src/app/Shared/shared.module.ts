@@ -16,9 +16,10 @@ import { MatSelectModule } from '@angular/material/select';
 import { ReactiveFormsModule } from '@angular/forms';
 import { HeaderComponent } from '../Widgets/Other-widgets/header/header.component';
 import { MatListModule } from '@angular/material/list';
+import { ClickOutsideDirective } from '../Directives/ClickOutside.directive';
 
 @NgModule({
-  declarations: [HeaderComponent],
+  declarations: [HeaderComponent, ClickOutsideDirective],
   imports: [
     CommonModule,
     FormsModule,

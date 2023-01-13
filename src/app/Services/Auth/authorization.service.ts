@@ -17,6 +17,10 @@ export class AuthorizationService {
   private _refreshToken: string;
   private _user: User;
 
+  get user(): User {
+    return JSON.parse(JSON.stringify(this._user));
+  }
+
   get token(): string {
     return this._token;
   }

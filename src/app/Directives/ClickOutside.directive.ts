@@ -1,10 +1,10 @@
-import { Directive, ElementRef, EventEmitter, Input } from '@angular/core';
+import { Directive, ElementRef, Input } from '@angular/core';
 
 @Directive({
   selector: '[appClickOutside]',
 })
 export class ClickOutsideDirective {
-  @Input() appClickOutside: EventEmitter<any>;
+  @Input() appClickOutside;
 
   constructor(private el: ElementRef) {}
 
@@ -17,8 +17,11 @@ export class ClickOutsideDirective {
   }
 
   clickOutside(event) {
-    if (!this.el.nativeElement.contains(event.target)) {
-      this.appClickOutside.emit();
+    if (
+      !this.el.nativeElement.contains(event.target) &&
+      this.appClickOutside.opened
+    ) {
+      this.appClickOutside.toggle();
     }
   }
 }

@@ -1,37 +1,51 @@
-@import '../../../../assets/styles/variables';
-.header{
+@import "../../../../assets/styles/variables";
+.header {
   background-color: $retroBlue;
   padding: 1rem;
   align-items: center;
-  &__spacer{
+  &__spacer {
     flex: 1 1 auto;
   }
-  &__logo{
-    flex:3 1 auto;
+  &__logo {
+    flex: 3;
     padding-right: 3rem;
     display: grid;
-    h1{
+    h1 {
       font-size: 2.5rem;
       font-weight: 500;
       margin: 0;
       color: $retroGray;
-
     }
   }
- span{
-  button{
-    display: inline;
-    .mat-icon{
-      color: $retroGray;
-      width: 100%;
+  &__profile {
+    width: auto;
+    display: flex;
+    justify-content: center;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    text-align: center;
+    align-items: center;
+    a {
       font-size: 1.5rem;
-
+      display: flex;
+      color: $retroGray;
+      text-decoration: none;
+      align-items: center;
     }
   }
+  span {
+    button {
+      display: inline;
+      .mat-icon {
+        color: $retroGray;
+        width: 100%;
+        font-size: 1.5rem;
+      }
+    }
   }
 }
 
-.sidenav{
+.sidenav {
   display: flex;
   align-items: center;
   justify-content: center;
@@ -40,27 +54,27 @@
 
   background-color: $retroBlue;
   padding: 1rem;
-  button{
+  button {
     display: inline-block;
-    width:max-content;
+    width: max-content;
     margin-bottom: 1rem;
-    .mat-icon{
+    .mat-icon {
       font-size: 1.5rem;
       width: 100%;
       color: $retroGray;
     }
   }
-  ul{
+  ul {
     list-style-type: none;
-    li{
+    li {
       font-size: 1.5rem;
       margin-bottom: 1rem;
-      a{
+      a {
         overflow-wrap: break-word;
         text-decoration: none;
-        color:$retroGray;
-        &:hover{
-          color:$retroAqua;
+        color: $retroGray;
+        &:hover {
+          color: $retroAqua;
         }
       }
     }
