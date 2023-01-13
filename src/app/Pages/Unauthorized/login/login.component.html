@@ -1,0 +1,32 @@
+<div class="background">
+  <div class="login">
+    <h1>Login</h1>
+    <form>
+      <span class="login__input">
+        <mat-form-field appearance="fill">
+          <mat-label>Username</mat-label>
+          <input matInput placeholder="Username" [(ngModel)]="username" name="username" />
+        </mat-form-field>
+        <mat-error *ngIf="userEmpty">
+          Username is <strong>required</strong>
+        </mat-error>
+      </span>
+      <span class="login__input">
+        <mat-form-field appearance="fill">
+          <mat-label>Password</mat-label>
+          <input matInput type="password" placeholder="Password" [(ngModel)]="password" name="password" />
+        </mat-form-field>
+        <mat-error *ngIf="passEmpty">
+          Password is <strong>required</strong>
+        </mat-error>
+      </span>
+      <span>
+        <mat-error *ngIf="loginInvalid">
+          Credentials doesn't match
+        </mat-error>
+      </span>
+
+      <button mat-raised-button (click)=" login()">Login </button>
+    </form>
+  </div>
+</div>

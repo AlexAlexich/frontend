@@ -1,0 +1,39 @@
+<mat-toolbar class="header">
+  <span>
+    <button mat-button (click)="sidenav.toggle()">
+      <mat-icon>menu</mat-icon>
+    </button>
+  </span>
+  <span class="header__spacer"> </span>
+  <span class="header__logo">
+    <h1>VIDEOTEKA</h1>
+  </span>
+  <span>
+    <h2>Welcome</h2>
+    <button mat-button (click)="logout()">
+      <mat-icon>exit_to_app</mat-icon>
+    </button>
+  </span>
+</mat-toolbar>
+<div appClickOutside (appClickOutside)="sidenav.toggle()">
+  <mat-sidenav #sidenav mode="side" opened="false" class="sidenav" [fixedInViewport]="options.value.fixed"
+    [fixedTopGap]="options.value.top" [fixedBottomGap]="options.value.bottom">
+    <span>
+      <button mat-button (click)="sidenav.toggle()">
+        <mat-icon>close</mat-icon>
+      </button>
+    </span>
+    <ul>
+      <li>
+        <a routerLink="{{ home }}">Home</a>
+      </li>
+      <li>
+        <a routerLink="{{ profile }}">Profile</a>
+      </li>
+      <li *ngFor="let route of extraRutes">
+        <a routerLink="{{ route.name }}">{{ route.name | titlecase }}</a>
+      </li>
+    </ul>
+  </mat-sidenav>
+  <mat-sidenav-container class="example-container"></mat-sidenav-container>
+</div>

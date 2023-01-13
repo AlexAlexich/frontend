@@ -1,0 +1,68 @@
+@import '../../../../assets/styles/variables';
+.header{
+  background-color: $retroBlue;
+  padding: 1rem;
+  align-items: center;
+  &__spacer{
+    flex: 1 1 auto;
+  }
+  &__logo{
+    flex:3 1 auto;
+    padding-right: 3rem;
+    display: grid;
+    h1{
+      font-size: 2.5rem;
+      font-weight: 500;
+      margin: 0;
+      color: $retroGray;
+
+    }
+  }
+ span{
+  button{
+    display: inline;
+    .mat-icon{
+      color: $retroGray;
+      width: 100%;
+      font-size: 1.5rem;
+
+    }
+  }
+  }
+}
+
+.sidenav{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 10%;
+  min-width: 150px;
+
+  background-color: $retroBlue;
+  padding: 1rem;
+  button{
+    display: inline-block;
+    width:max-content;
+    margin-bottom: 1rem;
+    .mat-icon{
+      font-size: 1.5rem;
+      width: 100%;
+      color: $retroGray;
+    }
+  }
+  ul{
+    list-style-type: none;
+    li{
+      font-size: 1.5rem;
+      margin-bottom: 1rem;
+      a{
+        overflow-wrap: break-word;
+        text-decoration: none;
+        color:$retroGray;
+        &:hover{
+          color:$retroAqua;
+        }
+      }
+    }
+  }
+}
