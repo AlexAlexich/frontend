@@ -11,7 +11,7 @@
     padding-right: 3rem;
     display: grid;
     h1 {
-      font-size: 2.5rem;
+      font-size:3.5rem;
       font-weight: 500;
       margin: 0;
       color: $retroGray;
@@ -26,7 +26,7 @@
     text-align: center;
     align-items: center;
     a {
-      font-size: 1.5rem;
+      font-size: 2.5rem;
       display: flex;
       color: $retroGray;
       text-decoration: none;
@@ -39,7 +39,8 @@
       .mat-icon {
         color: $retroGray;
         width: 100%;
-        font-size: 1.5rem;
+        height: 2.5rem;
+        font-size:2.5rem;
       }
     }
   }
@@ -59,15 +60,16 @@
     width: max-content;
     margin-bottom: 1rem;
     .mat-icon {
-      font-size: 1.5rem;
+      font-size: 2rem;
       width: 100%;
+      height: 2rem;
       color: $retroGray;
     }
   }
   ul {
     list-style-type: none;
     li {
-      font-size: 1.5rem;
+      font-size: 2rem;
       margin-bottom: 1rem;
       a {
         overflow-wrap: break-word;

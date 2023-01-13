@@ -3,7 +3,7 @@ h1{
   color: $retroBlue;
   text-align: center;
   font-weight: 400;
-  font-size: 2rem;
+  font-size: 3rem;
 }
 .cassette_actions{
   display: flex;
@@ -16,9 +16,9 @@ button{
   background-color: $retroAqua;
   margin-bottom: 1rem;
   .icon{
-    font-size: 1.5rem;
-    width: 1.5rem;
-    height: 1.5rem;
+    font-size: 2rem;
+    width:2rem;
+    height: 2rem;
   }
 }
 table{
