@@ -1,11 +1,11 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { ConstService } from 'src/app/Services/Const/const.service';
 import { FormBuilder } from '@angular/forms';
 import { CommonComponent } from 'src/app/Models/CommonComponent/CommonComponent.component';
 import { CurrentRouteService } from 'src/app/Services/CurrentRoute/current-route.service';
 import { AuthorizationService } from 'src/app/Services/Auth/authorization.service';
-import { Route } from 'src/app/Models/Route';
 import { User } from 'src/app/Models/Backend/User';
+import { PrivilagesEnum } from 'src/app/Services/Const/PrivilagesEnum.enum';
 @Component({
   selector: 'app-header',
   templateUrl: './header.component.html',
@@ -20,8 +20,12 @@ export class HeaderComponent extends CommonComponent implements OnInit {
   home: string = ConstService.home;
   profile: string = ConstService.profile;
   user: User;
-  @Input() extraRutes: Array<Route>;
+  adminPrivilegies = PrivilagesEnum.adminPrivilages;
+  adminHrPrivilegies = PrivilagesEnum.adminHrPrivilages;
 
+  rentRoute = ConstService.rentCassetes;
+  manageCassetteRoute = ConstService.manageCassettes;
+  manageUserRoute = ConstService.manageUsers;
   ngOnInit(): void {
     this.user = this.authorizationService.user;
   }

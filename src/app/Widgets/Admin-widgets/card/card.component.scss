@@ -1,0 +1,23 @@
+@import '../../../../assets/styles/variables';
+
+.card {
+  width: 20rem;
+  min-height: 15rem;
+  padding: 1.5rem;
+  text-align: center;
+  background-color: $retroBlue ;
+  border-radius: 1rem;
+  -webkit-box-shadow: 6px 6px 20px 0px rgba(135, 162, 251, 0.8);
+  -moz-box-shadow: 6px 6px 20px 0px rgba(135, 162, 251, 0.8);
+  box-shadow: 6px 6px 20px 0px rgba(135, 162, 251, 0.8);
+  color: $retroGray;
+  margin-bottom: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+
+  button {
+    color: $retroBlue;
+    background: $retroGray;
+  }
+}

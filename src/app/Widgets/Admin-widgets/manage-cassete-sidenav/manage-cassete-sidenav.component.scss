@@ -1,0 +1,14 @@
+@import '../../../../assets/styles/variables';
+.sidenav{
+  padding: 1.5rem;
+  background:$retroAqua;
+  width: 25%;
+  span{
+    display: block;
+  }
+ div{
+  button{
+    color: $retroBlue !important;
+  }
+ }
+}

@@ -1,32 +1,52 @@
 @import '../../../../../assets/styles/variables';
-h1{
+
+h1 {
   color: $retroBlue;
   text-align: center;
   font-weight: 400;
   font-size: 3rem;
 }
-.cassette_actions{
+
+.cassette_actions {
   display: flex;
   justify-content: space-between;
   text-align: center;
   align-items: center;
 }
-button{
+
+button {
   padding: 0.3rem;
-  background-color: $retroAqua;
+  background-color: $retroLightblue;
   margin-bottom: 1rem;
-  .icon{
+  color: $retroGray !important;
+
+  .icon {
     font-size: 2rem;
-    width:2rem;
+    width: 2rem;
     height: 2rem;
   }
 }
-table{
 
-  td,th{
-  color:$retroBlue
+table {
+
+  td,
+  th {
+    color: $retroBlue
   }
 }
-mat-paginator{
-  color:$retroBlue
+
+mat-paginator {
+  color: $retroBlue
+}
+
+.sidenav__content {
+  span {
+    display: block;
+  }
+
+  div {
+    button {
+      color: $retroBlue !important;
+    }
+  }
 }

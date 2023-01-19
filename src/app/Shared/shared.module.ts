@@ -17,9 +17,19 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { HeaderComponent } from '../Widgets/Other-widgets/header/header.component';
 import { MatListModule } from '@angular/material/list';
 import { ClickOutsideDirective } from '../Directives/ClickOutside.directive';
-
+import { MatDatepickerModule } from '@angular/material/datepicker';
+import { MatNativeDateModule } from '@angular/material/core';
+import { DebounceInputDirective } from '../Directives/DebounceInput.directive';
+import { LoaderComponent } from '../Widgets/Other-widgets/loader/loader.component';
+import { CardComponent } from '../Widgets/Admin-widgets/card/card.component';
 @NgModule({
-  declarations: [HeaderComponent, ClickOutsideDirective],
+  declarations: [
+    HeaderComponent,
+    ClickOutsideDirective,
+    DebounceInputDirective,
+    LoaderComponent,
+    CardComponent,
+  ],
   imports: [
     CommonModule,
     FormsModule,
@@ -37,8 +47,13 @@ import { ClickOutsideDirective } from '../Directives/ClickOutside.directive';
     MatSelectModule,
     ReactiveFormsModule,
     MatListModule,
+    MatDatepickerModule,
+    MatNativeDateModule,
   ],
   exports: [
+    CardComponent,
+    LoaderComponent,
+    ClickOutsideDirective,
     CommonModule,
     FormsModule,
     MatToolbarModule,
@@ -56,6 +71,9 @@ import { ClickOutsideDirective } from '../Directives/ClickOutside.directive';
     ReactiveFormsModule,
     HeaderComponent,
     MatListModule,
+    MatDatepickerModule,
+    MatNativeDateModule,
+    DebounceInputDirective,
   ],
 })
 export class SharedModule {}

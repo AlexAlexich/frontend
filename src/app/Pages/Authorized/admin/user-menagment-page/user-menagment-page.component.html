@@ -1,3 +1,75 @@
 <div class="wrapper">
-  <h1>Manage users</h1>
+  <h1>Register new user</h1>
+  <div class="register">
+    <form class="register__form">
+      <span class="register__input">
+        <mat-form-field appearance="fill">
+          <mat-label>Firstname</mat-label>
+          <input matInput placeholder="Firstname" [(ngModel)]="firstname" name="firstname" />
+        </mat-form-field>
+        <mat-error *ngIf="firstnameEmpty">
+          Firstname is <strong>empty or incorect</strong>
+        </mat-error>
+      </span>
+      <span class="register__input">
+        <mat-form-field appearance="fill">
+          <mat-label>Lastname</mat-label>
+          <input matInput placeholder="Lastname" [(ngModel)]="lastname" name="lastname" />
+        </mat-form-field>
+        <mat-error *ngIf="lastnameEmpty">
+          Lastname is <strong>empty or incorect</strong>
+        </mat-error>
+      </span>
+      <span class="register__input">
+        <mat-form-field appearance="fill">
+          <mat-label>Place of birth</mat-label>
+          <input matInput placeholder="Place of birth" [(ngModel)]="placeOfBirth" name="placeOfBirth" />
+        </mat-form-field>
+        <mat-error *ngIf="placeOfBirthEmpty">
+          Place of birth<strong>empty or incorect</strong>
+        </mat-error>
+      </span>
+      <span class="register__input">
+        <mat-form-field appearance="fill">
+          <mat-label>Choose a date</mat-label>
+          <input matInput [matDatepicker]="picker">
+          <mat-hint>MM/DD/YYYY</mat-hint>
+          <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
+          <mat-datepicker #picker></mat-datepicker>
+        </mat-form-field>
+        <mat-error *ngIf="dateOfBirthEmpty">
+          Birthdate <strong>empty or incorect</strong>
+        </mat-error>
+      </span>
+      <span class="register__input">
+        <mat-form-field appearance="fill">
+          <mat-label>Password</mat-label>
+          <input matInput type="password" placeholder="Password" [(ngModel)]="password" name="password" />
+        </mat-form-field>
+        <mat-error *ngIf="passEmpty">
+          Password is <strong>empty or incorect</strong>
+        </mat-error>
+      </span>
+      <span class="register__input">
+        <mat-form-field appearance="fill">
+          <mat-label>Email</mat-label>
+          <input matInput placeholder="Email" [(ngModel)]="email" name="email" />
+        </mat-form-field>
+        <mat-error *ngIf="emailEmpty">
+          Email is <strong>empty or incorect</strong>
+        </mat-error>
+      </span>
+
+      <span class="register__input">
+        <button mat-stroked-button (click)="register()"> Register user</button>
+      </span>
+    </form>
+    <h1 *ngIf="actionDone && actionStatus">
+      Successful
+    </h1>
+    <h1 *ngIf="actionDone&& !actionStatus">
+      Something went wrong
+    </h1>
+  </div>
+
 </div>

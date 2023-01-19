@@ -1,0 +1,7 @@
+<mat-sidenav #sidenavRight mode="side" appClickOutside (clickOutsideEvent)="forwardNext($event)"
+  [appClickOutside]="sidenavRight" class="sidenav" [fixedInViewport]="options.value.fixed"
+  [fixedTopGap]="options.value.top" position="end" [fixedBottomGap]="options.value.bottom" [opened]="opened">
+
+  <ng-content></ng-content>
+</mat-sidenav>
+<mat-sidenav-container class="example-container"></mat-sidenav-container>

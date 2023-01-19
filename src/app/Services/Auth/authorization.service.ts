@@ -52,8 +52,12 @@ export class AuthorizationService {
       tap((res) => {
         this.saveToken(res.token, res.refreshToken);
       }),
-      map(() => true),
-      catchError(async () => false)
+      map(() => {
+        return true;
+      }),
+      catchError(async (res) => {
+        return false;
+      })
     );
   }
   sendRefreshToken(): Observable<void> {

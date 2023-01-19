@@ -1,0 +1,43 @@
+@import '../../../../../assets/styles/variables';
+
+h1 {
+  color: $retroBlue;
+}
+
+.register {
+  width: 100%;
+
+  color: $retroBlue;
+
+  form {
+    display: flex;
+    justify-content: space-around;
+    flex-wrap: wrap;
+
+    span {
+      width: 40%;
+      padding: 1rem;
+
+      mat-form-field {
+        width: 100%;
+      }
+    }
+
+
+  }
+
+
+
+  button {
+    color: $retroBlue;
+
+    &:hover {
+      color: $retroGray;
+      background-color: $retroBlue;
+    }
+  }
+
+  h1 {
+    display: inline;
+  }
+}

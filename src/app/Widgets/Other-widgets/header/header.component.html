@@ -29,8 +29,14 @@
     <li>
       <a routerLink="{{ profile }}">Profile</a>
     </li>
-    <li *ngFor="let route of extraRutes">
-      <a routerLink="{{ route.name }}">{{ route.name | titlecase }}</a>
+    <li *ngIf="user.permissionIds.includes(adminPrivilegies)">
+      <a routerLink="{{rentRoute}}">Rent cassettes</a>
+    </li>
+    <li *ngIf="user.permissionIds.includes(adminPrivilegies)">
+      <a routerLink="{{manageCassetteRoute}}">Manage cassettes</a>
+    </li>
+    <li *ngIf="user.permissionIds.includes(adminHrPrivilegies)">
+      <a routerLink="{{manageUserRoute}}">Manage users</a>
     </li>
   </ul>
 </mat-sidenav>

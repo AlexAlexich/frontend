@@ -8,6 +8,7 @@ import { ProfileComponent } from '../profile/profile.component';
 import { AdminComponent } from './admin.component';
 import { CassetteMenagmentPageComponent } from './cassette-menagment-page/cassette-menagment-page.component';
 import { RentCassetesPageComponent } from './rent-cassetes-page/rent-cassetes-page.component';
+import { UserInfoPageComponent } from './user-info-page/user-info-page.component';
 import { UserMenagmentPageComponent } from './user-menagment-page/user-menagment-page.component';
 
 const routes: Routes = [
@@ -20,6 +21,7 @@ const routes: Routes = [
       navigatePage: ConstService.user,
     },
     children: [
+      { path: '', redirectTo: ConstService.home, pathMatch: 'full' },
       {
         path: ConstService.home,
         component: HomeComponent,
@@ -59,6 +61,15 @@ const routes: Routes = [
       {
         path: ConstService.rentCassetes,
         component: RentCassetesPageComponent,
+        canActivate: [AuthGuardService],
+        data: {
+          requiredPrivilege: PrivilagesEnum.adminPrivilages,
+          navigatePage: ConstService.user,
+        },
+      },
+      {
+        path: `${ConstService.userInfo}/:id`,
+        component: UserInfoPageComponent,
         canActivate: [AuthGuardService],
         data: {
           requiredPrivilege: PrivilagesEnum.adminPrivilages,

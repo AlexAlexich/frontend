@@ -1,10 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { tap } from 'rxjs';
 import { LoginCredentials } from 'src/app/Models/Backend/LoginCredentials';
 import { CommonComponent } from 'src/app/Models/CommonComponent/CommonComponent.component';
 import { AuthorizationService } from 'src/app/Services/Auth/authorization.service';
 import { ConstService } from 'src/app/Services/Const/const.service';
+import { ValidationService } from 'src/app/Services/Validation/validation.service';
 
 @Component({
   selector: 'app-login',
@@ -19,16 +19,17 @@ export class LoginComponent extends CommonComponent implements OnInit {
   loginInvalid: boolean = false;
   constructor(
     private authorizationService: AuthorizationService,
-    private router: Router
+    private router: Router,
+    private validationService: ValidationService
   ) {
     super();
   }
 
   ngOnInit() {}
 
-  login() {
-    this.checkUsername();
-    this.checkPassword();
+  login(): void {
+    this.userEmpty = this.validationService.validateStrings(this.username, 3);
+    this.passEmpty = this.validationService.validateStrings(this.password, 3);
     if (this.passEmpty || this.userEmpty) {
       return;
     }
@@ -36,28 +37,11 @@ export class LoginComponent extends CommonComponent implements OnInit {
     credentials.Username = this.username;
     credentials.Password = this.password;
 
-    this.authorizationService
-      .login(credentials)
-      .pipe(tap((res) => {}))
-      .subscribe((res) => {
-        this.loginInvalid = !res;
-        if (res) {
-          this.router.navigate([`/${ConstService.admin}`]);
-        }
-      });
-  }
-  checkUsername(): void {
-    if (!this.username || this.username.length < 3) {
-      this.userEmpty = true;
-      return;
-    }
-    this.userEmpty = false;
-  }
-  checkPassword(): void {
-    if (!this.password || this.password.length < 3) {
-      this.passEmpty = true;
-      return;
-    }
-    this.passEmpty = false;
+    this.authorizationService.login(credentials).subscribe((res) => {
+      this.loginInvalid = !res;
+      if (res) {
+        this.router.navigate([`/${ConstService.admin}`]);
+      }
+    });
   }
 }

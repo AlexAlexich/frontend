@@ -1,0 +1,44 @@
+<div class="wrapper">
+  <button mat-stroked-button (click)="goBack()">Back</button>
+  <div *ngIf="errorMsg">
+    {{errorMsg}}
+  </div>
+  <div *ngIf="loading">
+    <app-loader></app-loader>
+  </div>
+  <div class="userinfo" *ngIf="!errorMsg && !loading">
+
+    <span>
+      <h1>Id: {{user.id}} Name: {{user.fullName}}</h1> <button mat-stroked-button (click)="openSidenav()">Rent
+        cassettes</button>
+    </span>
+    <h2> Rented cassettes</h2>
+
+    <div class="userinfo__movies">
+      <app-card *ngFor="let item of cassettes" [casseteId]="item.id" [name]="item.name" [userId]="user.id">
+
+      </app-card>
+      <div *ngIf="cassettes.length===0">
+        <h3>User doesnt have rented cassettes</h3>
+      </div>
+    </div>
+  </div>
+</div>>
+<app-manage-cassete-sidenav [opened]="sidenavOpened" (clickedOutside)="changeOpenedToFalse($event)">
+  <div>
+    <h1>Rent cassette to user</h1>
+    <mat-form-field appearance="fill">
+      <mat-label>Chose cassette</mat-label>
+      <mat-select [(ngModel)]="selectedValue" matSelect name="cassette">
+        <mat-option *ngFor="let cassette of allCassettes" [value]="cassette.id">
+          {{cassette.name}}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+    <button mat-stroked-button (click)="rentCassete()">Rent</button>
+    <h1 *ngIf="apiCallSuccesfull">
+      Succesfull
+    </h1>
+    <h1 *ngIf="errorMsgSidebar">{{errorMsgSidebar}}</h1>
+  </div>
+</app-manage-cassete-sidenav>
