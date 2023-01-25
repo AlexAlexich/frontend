@@ -1,7 +1,10 @@
 import { Component, OnInit } from '@angular/core';
+import { map, Observable, of } from 'rxjs';
 import { RegisterInfo } from 'src/app/Models/Backend/RegisterInfo';
+import { RoleResponse } from 'src/app/Models/Backend/RoleResponse';
 import { CommonComponent } from 'src/app/Models/CommonComponent/CommonComponent.component';
 import { ApiService } from 'src/app/Services/Api/api.service';
+import { CommonPopupService } from 'src/app/Services/Popup/common-popup.service';
 import { ValidationService } from 'src/app/Services/Validation/validation.service';
 
 @Component({
@@ -26,15 +29,29 @@ export class UserMenagmentPageComponent
   passEmpty: boolean = false;
   emailEmpty: boolean = false;
   dateOfBirthEmpty: boolean;
-
+  roleEmpty: boolean;
+  roles: Array<RoleResponse>;
   actionDone: boolean = false;
   actionStatus: boolean;
 
-  constructor(private validate: ValidationService, private api: ApiService) {
+  loading: boolean = true;
+  selectedRoleId: string;
+  today = new Date();
+
+  constructor(
+    private validate: ValidationService,
+    private api: ApiService,
+    private popUp: CommonPopupService
+  ) {
     super();
   }
 
-  ngOnInit() {}
+  ngOnInit() {
+    this.api.getRoles().subscribe((x) => {
+      this.roles = x;
+      this.loading = false;
+    });
+  }
 
   register() {
     this.actionDone = false;
@@ -46,13 +63,14 @@ export class UserMenagmentPageComponent
     );
     this.passEmpty = this.validate.validateStrings(this.password, 3);
     this.emailEmpty = this.validate.validateStrings(this.email, 3);
-    this.dateOfBirthEmpty = this.validate.validateStrings(this.dateOfBirth, 10);
+    this.dateOfBirthEmpty = this.validate.validateStrings(this.dateOfBirth, 8);
     if (
       this.firstnameEmpty ||
       this.lastnameEmpty ||
       this.placeOfBirthEmpty ||
       this.passEmpty ||
-      this.emailEmpty
+      this.emailEmpty ||
+      !this.selectedRoleId
     ) {
       return;
     }
@@ -63,10 +81,46 @@ export class UserMenagmentPageComponent
     regInfo.dateOfBirth = this.dateOfBirth;
     regInfo.email = this.email;
     regInfo.password = this.password;
-
+    regInfo.roles = [
+      {
+        id: parseInt(this.selectedRoleId),
+        name: this.roles.find((x) => x.id === parseInt(this.selectedRoleId))
+          .name,
+      },
+    ];
     this.api.register(regInfo).subscribe((res) => {
       this.actionStatus = res;
       this.actionDone = true;
     });
+  }
+  override canDeactivate(): Observable<boolean> {
+    let firstnameEmpty = this.validate.validateStrings(this.firstname, 3);
+    let lastnameEmpty = this.validate.validateStrings(this.lastname, 3);
+    let placeOfBirthEmpty = this.validate.validateStrings(this.placeOfBirth, 3);
+    let passEmpty = this.validate.validateStrings(this.password, 3);
+    let emailEmpty = this.validate.validateStrings(this.email, 3);
+    let dateOfBirthEmpty = this.validate.validateStrings(this.dateOfBirth, 8);
+    if (
+      firstnameEmpty &&
+      lastnameEmpty &&
+      placeOfBirthEmpty &&
+      passEmpty &&
+      emailEmpty &&
+      dateOfBirthEmpty &&
+      !this.selectedRoleId
+    ) {
+      return of(true);
+    }
+
+    return this.popUp
+      .openPopup(
+        'WARNING',
+        'You have some unsaved changed, are you sure you want to procceed?'
+      )
+      .pipe(
+        map((res) => {
+          return res;
+        })
+      );
   }
 }

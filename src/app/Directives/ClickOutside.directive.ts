@@ -11,6 +11,7 @@ import {
 })
 export class ClickOutsideDirective {
   @Input() appClickOutside;
+
   constructor(private el: ElementRef) {}
 
   ngOnInit() {
@@ -22,10 +23,10 @@ export class ClickOutsideDirective {
   }
 
   clickOutside(event) {
-    if (
-      event.target.closest('mat-select') ||
-      event.target.matches('mat-select')
-    ) {
+    if (event.target.id == 'ignore-this') {
+      return;
+    }
+    if (event.target.closest('#ignore-this')) {
       return;
     }
     if (

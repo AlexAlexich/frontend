@@ -18,9 +18,6 @@ export class ManageCasseteSidenavComponent
     right: 0,
   });
   @Input() opened: boolean;
-
-  @Input() preventClose: boolean;
-
   @Output() clickedOutside: EventEmitter<boolean> = new EventEmitter<boolean>();
   constructor(private _formBuilder: FormBuilder) {
     super();

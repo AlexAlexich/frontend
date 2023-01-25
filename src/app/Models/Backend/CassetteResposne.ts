@@ -1,5 +1,11 @@
-export class CassetteResposne {
+export class UserCassetteResposne {
   id: number;
-  name: string;
-  quantity: number;
+  userId: number;
+  takeDate: string;
+  returnDate: string;
+  cassette: {
+    id: number;
+    name: string;
+    quantity: number;
+  };
 }

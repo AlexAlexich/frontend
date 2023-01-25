@@ -1,6 +1,8 @@
 <div class="wrapper">
   <h1>Manage cassettes</h1>
-  <div>
+  <app-loader *ngIf="loading"></app-loader>
+
+  <div *ngIf="!loading">
     <div class="cassette_actions">
       <mat-form-field>
         <mat-label>Filter</mat-label>

@@ -1,3 +1,5 @@
+import { RoleResponse } from './RoleResponse';
+
 export class RegisterInfo {
   firstName: string;
   lastName: string;
@@ -5,4 +7,5 @@ export class RegisterInfo {
   dateOfBirth: string;
   password: string;
   email: string;
+  roles: Array<RoleResponse>;
 }

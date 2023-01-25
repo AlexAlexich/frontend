@@ -2,7 +2,7 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
-import { CassetteResposne } from 'src/app/Models/Backend/CassetteResposne';
+import { CreateCasseteModel } from 'src/app/Models/Backend/CreateCasseteModel';
 import { CommonComponent } from 'src/app/Models/CommonComponent/CommonComponent.component';
 import { ApiService } from 'src/app/Services/Api/api.service';
 import { ValidationService } from 'src/app/Services/Validation/validation.service';
@@ -16,21 +16,33 @@ export class CassetteMenagmentPageComponent
   extends CommonComponent
   implements OnInit
 {
+  loading: boolean = true;
   displayedColumns: string[] = ['id', 'name', 'quantity', 'actions'];
   timeout: any;
-  dataSource: MatTableDataSource<CassetteResposne>;
-  @ViewChild(MatPaginator) paginator: MatPaginator;
+  dataSource: MatTableDataSource<CreateCasseteModel>;
   @ViewChild(MatSort) sort: MatSort;
 
   shouldAdd: boolean = false;
   shouldEdit: boolean = false;
-  cassette: CassetteResposne;
+  cassette: CreateCasseteModel;
   casseteName: string;
   casseteQuantity: string;
   actionStatus: boolean;
   actionDone: boolean;
   casseteEmpty: boolean;
   casseteQuantityEmpty: boolean;
+
+  _paginator: MatPaginator;
+
+  @ViewChild(MatPaginator, { static: false }) set matPaginator(
+    paginator: MatPaginator
+  ) {
+    this._paginator = paginator;
+
+    if (this.dataSource) {
+      this.dataSource.paginator = paginator;
+    }
+  }
 
   constructor(private api: ApiService, private validate: ValidationService) {
     super();
@@ -41,7 +53,7 @@ export class CassetteMenagmentPageComponent
   }
   openSidenav(
     openCase: string,
-    cassete: CassetteResposne = { id: null, name: null, quantity: null }
+    cassete: CreateCasseteModel = { id: null, name: null, quantity: null }
   ) {
     if (openCase === 'add') {
       this.shouldAdd = true;
@@ -60,8 +72,15 @@ export class CassetteMenagmentPageComponent
     this.api.getAllCassettes().subscribe((res) => {
       this.dataSource = new MatTableDataSource();
       this.dataSource.data = res;
-      this.dataSource.paginator = this.paginator;
       this.dataSource.sort = this.sort;
+      this.dataSource.filterPredicate = function (record, filter) {
+        return record.name
+          .toLowerCase()
+          .trim()
+          .includes(filter.toLowerCase().trim());
+      };
+      this.dataSource.paginator = this._paginator;
+      this.loading = false;
     });
   }
   filterMovies(filterValue: any) {
@@ -80,14 +99,18 @@ export class CassetteMenagmentPageComponent
     if (this.casseteEmpty || this.casseteQuantityEmpty) {
       return;
     }
-    const cassete = new CassetteResposne();
+    const cassete = new CreateCasseteModel();
     cassete.id = 0;
     cassete.name = this.casseteName;
     cassete.quantity = parseInt(this.casseteQuantity);
     this.api.createCassete(cassete).subscribe((res) => {
       this.actionStatus = res;
       this.actionDone = true;
-      this.renderMovises();
+      if (res) {
+        this.casseteName = null;
+        this.casseteQuantity = null;
+        this.renderMovises();
+      }
     });
   }
   editCassete(): void {
@@ -99,7 +122,7 @@ export class CassetteMenagmentPageComponent
     if (this.casseteEmpty || this.casseteQuantityEmpty) {
       return;
     }
-    const cassete = new CassetteResposne();
+    const cassete = new CreateCasseteModel();
     cassete.id = this.cassette.id;
     cassete.name = this.casseteName;
     cassete.quantity = parseInt(this.casseteQuantity);
@@ -107,6 +130,8 @@ export class CassetteMenagmentPageComponent
       this.actionStatus = res;
       this.actionDone = true;
       if (res) {
+        this.casseteName = null;
+        this.casseteQuantity = null;
         this.cassette = cassete;
         this.renderMovises();
       }

@@ -10,20 +10,24 @@ h1 {
   color: $retroBlue;
 
   form {
-    display: flex;
-    justify-content: space-around;
-    flex-wrap: wrap;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
 
     span {
-      width: 40%;
       padding: 1rem;
 
       mat-form-field {
         width: 100%;
       }
+
+      &:last-of-type {
+        width: 100%;
+        grid-column-start: 2;
+        grid-column-end: 2;
+        grid-row-start: 5;
+        grid-row-end: 7;
+      }
     }
-
-
   }
 
 

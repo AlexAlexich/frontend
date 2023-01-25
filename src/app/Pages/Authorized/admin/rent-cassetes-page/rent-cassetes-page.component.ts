@@ -19,10 +19,23 @@ export class RentCassetesPageComponent
 {
   userInfo: string = ConstService.userInfo;
   admin: string;
-  displayedColumns: string[] = ['id', 'name', 'email'];
+  loading: boolean = true;
+  displayedColumns: string[] = ['id', 'name', 'email', 'role'];
   dataSource: MatTableDataSource<UserResponse>;
-  @ViewChild(MatPaginator) paginator: MatPaginator;
+  _paginator: MatPaginator;
+
   @ViewChild(MatSort) sort: MatSort;
+
+  @ViewChild(MatPaginator, { static: false }) set matPaginator(
+    paginator: MatPaginator
+  ) {
+    this._paginator = paginator;
+
+    if (this.dataSource) {
+      this.dataSource.paginator = paginator;
+    }
+  }
+
   constructor(
     private api: ApiService,
     private router: Router,
@@ -32,11 +45,39 @@ export class RentCassetesPageComponent
   }
 
   ngOnInit() {
+    this.api.getAllUsers().subscribe((x) => {
+      console.log('1 ', x);
+    });
+    this.api.getAllUsers().subscribe((x) => {
+      console.log('2 ', x);
+    });
+    this.api.getAllUsers().subscribe((x) => {
+      console.log('3 ', x);
+    });
+    this.api.getAllUsers().subscribe((x) => {
+      console.log('4 ', x);
+    });
+    this.api.getAllUsers().subscribe((x) => {
+      console.log('5 ', x);
+    });
+    this.api.getAllUsers().subscribe((x) => {
+      console.log('6 ', x);
+    });
+    this.api.getAllUsers().subscribe((x) => {
+      console.log('7 ', x);
+    });
+
     this.api.getAllUsers().subscribe((res) => {
       this.dataSource = new MatTableDataSource();
       this.dataSource.data = res;
-      this.dataSource.paginator = this.paginator;
       this.dataSource.sort = this.sort;
+      this.dataSource.filterPredicate = function (record, filter) {
+        return record.fullName
+          .toLowerCase()
+          .trim()
+          .includes(filter.toLowerCase().trim());
+      };
+      this.loading = false;
     });
   }
   filterUsers(filterValue: string): void {

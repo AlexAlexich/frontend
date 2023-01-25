@@ -33,8 +33,6 @@ export class AuthorizationService {
   }
 
   get isAuthenticated(): boolean {
-    console.log(this._user);
-    console.log(!!this._user);
     return !!this._user;
   }
 

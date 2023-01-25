@@ -3,6 +3,7 @@ import { RouterModule, Routes } from '@angular/router';
 import { ConstService } from 'src/app/Services/Const/const.service';
 import { PrivilagesEnum } from 'src/app/Services/Const/PrivilagesEnum.enum';
 import { AuthGuardService } from 'src/app/Services/Guards/AuthGuard.service';
+import { LeaveGuardService } from 'src/app/Services/Guards/LeaveGuard.service';
 import { HomeComponent } from '../home/home.component';
 import { ProfileComponent } from '../profile/profile.component';
 import { AdminComponent } from './admin.component';
@@ -16,6 +17,7 @@ const routes: Routes = [
     path: '',
     component: AdminComponent,
     canActivate: [AuthGuardService],
+    canDeactivate: [LeaveGuardService],
     data: {
       requiredPrivilege: PrivilagesEnum.adminPrivilages,
       navigatePage: ConstService.user,
@@ -53,6 +55,8 @@ const routes: Routes = [
         path: ConstService.manageUsers,
         component: UserMenagmentPageComponent,
         canActivate: [AuthGuardService],
+        canDeactivate: [LeaveGuardService],
+
         data: {
           requiredPrivilege: PrivilagesEnum.adminHrPrivilages,
           navigatePage: ConstService.user,
