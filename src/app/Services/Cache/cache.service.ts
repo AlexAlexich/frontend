@@ -6,24 +6,25 @@ import { catchError, map, Observable, of, share } from 'rxjs';
 })
 export class CacheService {
   private cache: Map<string, any> = new Map();
-
   constructor() {}
 
-  get(key: string, ObservableApi: Observable<any>): Observable<any> {
+  get(key: string, observableApi: Observable<any>): Observable<any> {
     let response: CacheModel = this.cache.get(key);
 
-    if (response && response.hasResponse) {
-      return of(response.cache);
-    }
-    if (!response) {
-      this.setCache(key, ObservableApi);
+    if (response) {
+      if (response.cache) {
+        return of(JSON.parse(JSON.stringify(response.cache)));
+      }
+      return response.observableApi.pipe(
+        map((res) => {
+          return JSON.parse(JSON.stringify(res));
+        })
+      );
     }
 
-    return ObservableApi.pipe(
-      map((res) => {
-        return JSON.parse(JSON.stringify(res));
-      })
-    );
+    observableApi = observableApi.pipe(share());
+    this.setCache(key, observableApi);
+    return observableApi;
   }
 
   has(key: string) {
@@ -63,7 +64,7 @@ export class CacheModel {
   cache: any;
   observableApi: Observable<any>;
   constructor(obsApi: Observable<any>) {
-    this.observableApi = obsApi.pipe(share());
+    this.observableApi = obsApi;
     this.observableApi.subscribe((x) => {
       this.cache = x;
       this.hasResponse = true;

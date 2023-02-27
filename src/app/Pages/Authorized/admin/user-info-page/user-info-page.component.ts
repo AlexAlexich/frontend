@@ -4,14 +4,26 @@ import { MatPaginator } from '@angular/material/paginator';
 import { MatSelect } from '@angular/material/select';
 import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
-import { ActivatedRoute, Router } from '@angular/router';
-import { catchError, forkJoin, mergeMap } from 'rxjs';
+import { Router } from '@angular/router';
+import {
+  catchError,
+  finalize,
+  forkJoin,
+  map,
+  mergeMap,
+  Observable,
+} from 'rxjs';
 import { UserCassetteResposne } from 'src/app/Models/Backend/CassetteResposne';
 import { CreateCasseteModel } from 'src/app/Models/Backend/CreateCasseteModel';
 import { UserResponse } from 'src/app/Models/Backend/UserResponse';
 import { CommonComponent } from 'src/app/Models/CommonComponent/CommonComponent.component';
 import { casseteActionInfo } from 'src/app/Models/ReturnInfo';
 import { ApiService } from 'src/app/Services/Api/api.service';
+class ApiData {
+  user: UserResponse;
+  cassette: UserCassetteResposne[];
+  allCassettes: CreateCasseteModel[];
+}
 
 @Component({
   selector: 'app-user-info-page',
@@ -29,7 +41,7 @@ export class UserInfoPageComponent extends CommonComponent implements OnInit {
   errorMsg: string;
   errorMsgSidebar: string;
   allCassettes: Array<CreateCasseteModel>;
-
+  idUser: number;
   displayedColumns: string[] = [
     'orderId',
 
@@ -50,6 +62,7 @@ export class UserInfoPageComponent extends CommonComponent implements OnInit {
       this.dataSource.paginator = paginator;
     }
   }
+
   errMsg: string;
   dataSource: MatTableDataSource<UserCassetteResposne>;
 
@@ -57,61 +70,64 @@ export class UserInfoPageComponent extends CommonComponent implements OnInit {
   @ViewChild('matOption') matOption: MatSelect;
   constructor(
     private router: Router,
-    private activeRoute: ActivatedRoute,
     private api: ApiService,
     private location: Location
   ) {
     super();
   }
 
-  ngOnInit() {
-    this.activeRoute.queryParams
-      .pipe(
-        mergeMap((res) => {
-          return forkJoin([
-            this.api.getUserById(res['id']),
-            this.api.getCasseteByUserId(res['id']),
-            this.api.getAllCassettes(),
-          ]);
-        }),
-        catchError((res) => {
-          this.errorMsg = res.error.message;
-          this.loading = false;
-          return res;
-        })
-      )
-      .subscribe((res) => {
-        this.dataSource = new MatTableDataSource();
-        let userRes = res[0];
-        let casseteRes = res[1];
-        let allCassettes = res[2];
-        this.user = new UserResponse();
-        this.user = userRes;
-        this.dataSource.data = casseteRes;
+  setUserCassetes(id: number): Observable<void> {
+    this.dataSource = new MatTableDataSource();
+
+    return this.api.getCasseteByUserId(id).pipe(
+      map((x) => {
+        this.dataSource.data = x;
         this.dataSource.sort = this.sort;
-        this.dataSource.filterPredicate = function (record, filter) {
+        this.dataSource.filterPredicate = (record, filter) => {
           return record.cassette.name
             .toLowerCase()
             .trim()
             .includes(filter.toLowerCase().trim());
         };
-        this.allCassettes = allCassettes;
-        this.loading = false;
-      });
+      })
+    );
+  }
+  setAllCassettes(): Observable<void> {
+    return this.api.getAllCassettes().pipe(
+      map((x) => {
+        this.allCassettes = x;
+      })
+    );
   }
 
-  openSidenav() {
+  ngOnInit() {
+    this.idUser = +(this.router.parseUrl(this.router.url).queryParams as any)
+      .id;
+
+    forkJoin([this.setUserCassetes(this.idUser), this.setAllCassettes()])
+      .pipe(
+        finalize(() => {
+          this.loading = false;
+        }),
+        catchError((err) => {
+          this.errorMsg = err.error.message;
+          throw err;
+        })
+      )
+      .subscribe();
+  }
+
+  openSidenav(): void {
     this.sidenavOpened = true;
   }
-  goBack() {
+  goBack(): void {
     this.location.back();
   }
 
-  rentCassete() {
+  rentCassete(): void {
     let rentInfo = new casseteActionInfo();
     rentInfo.casseteId = parseInt(this.selectedValue);
     rentInfo.userId = this.user.id;
-    console.log(this.selectedValue);
     this.api
       .rentCassete(rentInfo)
       .pipe(
@@ -120,7 +136,6 @@ export class UserInfoPageComponent extends CommonComponent implements OnInit {
           return this.api.getCasseteByUserId(this.user.id);
         }),
         catchError((res) => {
-          console.log(res);
           this.errorMsgSidebar = res.error.message;
           return res;
         })
@@ -130,7 +145,7 @@ export class UserInfoPageComponent extends CommonComponent implements OnInit {
       });
   }
 
-  changeOpenedToFalse(res: boolean) {
+  changeOpenedToFalse(res: boolean): void {
     this.sidenavOpened = res;
   }
   filterCassete(filterValue: string): void {
@@ -141,7 +156,7 @@ export class UserInfoPageComponent extends CommonComponent implements OnInit {
     }
   }
 
-  returnCassette(casseteId: number) {
+  returnCassette(casseteId: number): void {
     let returnInfo = new casseteActionInfo();
     returnInfo.casseteId = casseteId;
     returnInfo.userId = this.user.id;
@@ -152,7 +167,6 @@ export class UserInfoPageComponent extends CommonComponent implements OnInit {
           return this.api.getCasseteByUserId(this.user.id);
         }),
         catchError((res) => {
-          console.log(res);
           this.errorMsgSidebar = res.error.message;
           return res;
         })

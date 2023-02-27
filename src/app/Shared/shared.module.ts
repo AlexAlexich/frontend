@@ -22,6 +22,8 @@ import { MatNativeDateModule } from '@angular/material/core';
 import { DebounceInputDirective } from '../Directives/DebounceInput.directive';
 import { LoaderComponent } from '../Widgets/Other-widgets/loader/loader.component';
 import { CardComponent } from '../Widgets/Admin-widgets/card/card.component';
+import { GetUserNameEmailPipe } from '../Pipes/get-user-name-email.pipe';
+import { GetUserPipe } from '../Pipes/get-user.pipe';
 @NgModule({
   declarations: [
     HeaderComponent,
@@ -29,6 +31,8 @@ import { CardComponent } from '../Widgets/Admin-widgets/card/card.component';
     DebounceInputDirective,
     LoaderComponent,
     CardComponent,
+    GetUserNameEmailPipe,
+    GetUserPipe,
   ],
   imports: [
     CommonModule,
@@ -51,6 +55,8 @@ import { CardComponent } from '../Widgets/Admin-widgets/card/card.component';
     MatNativeDateModule,
   ],
   exports: [
+    GetUserNameEmailPipe,
+    GetUserPipe,
     CardComponent,
     LoaderComponent,
     ClickOutsideDirective,

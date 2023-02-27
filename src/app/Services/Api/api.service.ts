@@ -74,7 +74,10 @@ export class ApiService {
     return this.cacheService.get(API_KEY + USER, call);
   }
   getUserById(id: number): Observable<UserResponse> {
-    return this.http.get<UserResponse>(API_KEY + GET_USER_BY_ID + `?id=${id}`);
+    return this.cacheService.get(
+      API_KEY + GET_USER_BY_ID + `?id=${id}`,
+      this.http.get<UserResponse>(API_KEY + GET_USER_BY_ID + `?id=${id}`)
+    );
   }
   getAllCassettes(): Observable<Array<CreateCasseteModel>> {
     let call = this.http.get<Array<CreateCasseteModel>>(

@@ -38,7 +38,7 @@ export class CassetteMenagmentPageComponent
     paginator: MatPaginator
   ) {
     this._paginator = paginator;
-
+    this.matPaginator;
     if (this.dataSource) {
       this.dataSource.paginator = paginator;
     }
@@ -51,15 +51,12 @@ export class CassetteMenagmentPageComponent
   changeOpenToFalse(res: boolean) {
     this.sidenavOpened = res;
   }
-  openSidenav(
-    openCase: string,
-    cassete: CreateCasseteModel = { id: null, name: null, quantity: null }
-  ) {
+  openSidenav(openCase: string, cassete: CreateCasseteModel = null) {
     if (openCase === 'add') {
       this.shouldAdd = true;
       this.shouldEdit = false;
     } else {
-      this.cassette = cassete;
+      this.cassette = JSON.parse(JSON.stringify(cassete));
       this.shouldAdd = false;
       this.shouldEdit = true;
     }
@@ -73,7 +70,7 @@ export class CassetteMenagmentPageComponent
       this.dataSource = new MatTableDataSource();
       this.dataSource.data = res;
       this.dataSource.sort = this.sort;
-      this.dataSource.filterPredicate = function (record, filter) {
+      this.dataSource.filterPredicate = (record, filter) => {
         return record.name
           .toLowerCase()
           .trim()

@@ -9,7 +9,7 @@
   <div class="userinfo" *ngIf="!errorMsg && !loading">
 
     <span>
-      <h1>Id: {{user.id}} Name: {{user.fullName}}</h1> <button mat-stroked-button (click)="openSidenav()">Rent
+      <h1> {{idUser | getUser| async | getUserNameEmail}}</h1> <button mat-stroked-button (click)="openSidenav()">Rent
         cassettes</button>
     </span>
     <h2> Rented cassettes</h2>

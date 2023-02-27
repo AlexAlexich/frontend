@@ -45,28 +45,6 @@ export class RentCassetesPageComponent
   }
 
   ngOnInit() {
-    this.api.getAllUsers().subscribe((x) => {
-      console.log('1 ', x);
-    });
-    this.api.getAllUsers().subscribe((x) => {
-      console.log('2 ', x);
-    });
-    this.api.getAllUsers().subscribe((x) => {
-      console.log('3 ', x);
-    });
-    this.api.getAllUsers().subscribe((x) => {
-      console.log('4 ', x);
-    });
-    this.api.getAllUsers().subscribe((x) => {
-      console.log('5 ', x);
-    });
-    this.api.getAllUsers().subscribe((x) => {
-      console.log('6 ', x);
-    });
-    this.api.getAllUsers().subscribe((x) => {
-      console.log('7 ', x);
-    });
-
     this.api.getAllUsers().subscribe((res) => {
       this.dataSource = new MatTableDataSource();
       this.dataSource.data = res;

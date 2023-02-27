@@ -11,10 +11,23 @@ import { Observable, of } from 'rxjs';
 import { HTTP_INTERCEPTORS } from '@angular/common/http';
 import { InterceptorService } from './Services/Interceptor/Interceptor.service';
 import { AuthorizedComponent } from './Pages/Authorized/Authorized.component';
+import { ApiService } from './Services/Api/api.service';
+import { UserResponse } from './Models/Backend/UserResponse';
+import { CreateCasseteModel } from './Models/Backend/CreateCasseteModel';
 
-export function initializeApp1(authorizationService: AuthorizationService) {
+export function getCurrentUser(authorizationService: AuthorizationService) {
   return (): Observable<void> => {
     return of(authorizationService.initService());
+  };
+}
+export function getAllUsers(api: ApiService) {
+  return (): Observable<Array<UserResponse>> => {
+    return api.getAllUsers();
+  };
+}
+export function getAllCassette(api: ApiService) {
+  return (): Observable<Array<CreateCasseteModel>> => {
+    return api.getAllCassettes();
   };
 }
 @NgModule({
@@ -28,8 +41,20 @@ export function initializeApp1(authorizationService: AuthorizationService) {
   providers: [
     {
       provide: APP_INITIALIZER,
-      useFactory: initializeApp1,
+      useFactory: getCurrentUser,
       deps: [AuthorizationService],
+      multi: true,
+    },
+    {
+      provide: APP_INITIALIZER,
+      useFactory: getAllUsers,
+      deps: [ApiService],
+      multi: true,
+    },
+    {
+      provide: APP_INITIALIZER,
+      useFactory: getAllCassette,
+      deps: [ApiService],
       multi: true,
     },
     {

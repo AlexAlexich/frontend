@@ -12,7 +12,7 @@ import { CommonComponent } from '../Models/CommonComponent/CommonComponent.compo
   selector: '[input[debounceInput]]',
 })
 export class DebounceInputDirective extends CommonComponent {
-  @Input() time: number = 0;
+  @Input() time: number = 300;
   @Output()
   readonly debounceInput: EventEmitter<string> = new EventEmitter<string>();
   constructor(private el: ElementRef<HTMLInputElement>) {
