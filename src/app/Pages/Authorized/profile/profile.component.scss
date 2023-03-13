@@ -1,0 +1,32 @@
+@import '../../../../assets/styles/variables';
+
+h1 {
+  color: $retroBlue
+}
+
+.userinfo {
+
+  span,
+  h2 {
+    color: $retroBlue ;
+  }
+
+  span {
+    display: flex;
+    justify-content: space-between;
+
+    h1 {
+      width: fit-content;
+    }
+
+    button {
+      background: $retroLightblue;
+      color: $retroGray;
+
+      &:hover {
+        background: $retroBlue;
+        color: $retroGray;
+      }
+    }
+  }
+}

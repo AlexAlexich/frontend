@@ -25,11 +25,25 @@
       }
     }
   }
+}
 
-  &__movies {
-    display: flex;
-    justify-content: space-around;
-    flex-wrap: wrap;
+.sidenav {
+  color: $retroBlue;
+
+  .button__action {
+    display: block;
+    width: 6rem;
+    height: 3rem;
+    padding: 0.5rem;
+    border: none;
+    border-radius: 0.7rem;
+    font-size: 1.8rem;
+    background-color: $retroLightblue;
+    color: white;
+
+    &:hover {
+      cursor: pointer;
+      border: 1px solid $retroGray;
+    }
   }
-
 }

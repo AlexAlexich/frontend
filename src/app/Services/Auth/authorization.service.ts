@@ -48,9 +48,12 @@ export class AuthorizationService {
   login(credentials: LoginCredentials): Observable<boolean> {
     return this.api.login(credentials).pipe(
       tap((res) => {
+        console.log(this._user);
+
         this.saveToken(res.token, res.refreshToken);
       }),
       map(() => {
+        console.log(this._user);
         return true;
       }),
       catchError(async (res) => {

@@ -52,7 +52,7 @@ export class CacheService {
         this.cache.delete(key);
         return true;
       }),
-      catchError(() => {
+      catchError((res) => {
         return of(false);
       })
     );

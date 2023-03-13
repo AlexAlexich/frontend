@@ -21,18 +21,22 @@ import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatNativeDateModule } from '@angular/material/core';
 import { DebounceInputDirective } from '../Directives/DebounceInput.directive';
 import { LoaderComponent } from '../Widgets/Other-widgets/loader/loader.component';
-import { CardComponent } from '../Widgets/Admin-widgets/card/card.component';
 import { GetUserNameEmailPipe } from '../Pipes/get-user-name-email.pipe';
 import { GetUserPipe } from '../Pipes/get-user.pipe';
+import { ProfileComponent } from '../Pages/Authorized/profile/profile.component';
+import { HomeComponent } from '../Pages/Authorized/home/home.component';
+import { DialogComponent } from '../Widgets/dialog/dialog.component';
 @NgModule({
   declarations: [
     HeaderComponent,
     ClickOutsideDirective,
     DebounceInputDirective,
     LoaderComponent,
-    CardComponent,
     GetUserNameEmailPipe,
     GetUserPipe,
+    ProfileComponent,
+    HomeComponent,
+    DialogComponent,
   ],
   imports: [
     CommonModule,
@@ -53,11 +57,11 @@ import { GetUserPipe } from '../Pipes/get-user.pipe';
     MatListModule,
     MatDatepickerModule,
     MatNativeDateModule,
+    ReactiveFormsModule,
   ],
   exports: [
     GetUserNameEmailPipe,
     GetUserPipe,
-    CardComponent,
     LoaderComponent,
     ClickOutsideDirective,
     CommonModule,
@@ -80,6 +84,9 @@ import { GetUserPipe } from '../Pipes/get-user.pipe';
     MatDatepickerModule,
     MatNativeDateModule,
     DebounceInputDirective,
+    ReactiveFormsModule,
+    HomeComponent,
+    DialogComponent,
   ],
 })
 export class SharedModule {}

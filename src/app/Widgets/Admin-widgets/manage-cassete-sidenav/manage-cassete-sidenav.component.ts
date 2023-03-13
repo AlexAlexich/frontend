@@ -18,12 +18,12 @@ export class ManageCasseteSidenavComponent
     right: 0,
   });
   @Input() opened: boolean;
-  @Output() clickedOutside: EventEmitter<boolean> = new EventEmitter<boolean>();
+  @Output() clickedOutside: EventEmitter<void> = new EventEmitter<void>();
   constructor(private _formBuilder: FormBuilder) {
     super();
   }
   ngOnInit(): void {}
   forwardNext(event: boolean) {
-    this.clickedOutside.emit(event);
+    this.clickedOutside.emit();
   }
 }

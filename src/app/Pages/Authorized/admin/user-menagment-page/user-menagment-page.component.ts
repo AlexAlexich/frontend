@@ -1,11 +1,11 @@
 import { Component, OnInit } from '@angular/core';
-import { map, Observable, of } from 'rxjs';
+import { FormBuilder, Validators } from '@angular/forms';
+import { catchError, map, Observable, of } from 'rxjs';
 import { RegisterInfo } from 'src/app/Models/Backend/RegisterInfo';
 import { RoleResponse } from 'src/app/Models/Backend/RoleResponse';
 import { CommonComponent } from 'src/app/Models/CommonComponent/CommonComponent.component';
 import { ApiService } from 'src/app/Services/Api/api.service';
 import { CommonPopupService } from 'src/app/Services/Popup/common-popup.service';
-import { ValidationService } from 'src/app/Services/Validation/validation.service';
 
 @Component({
   selector: 'app-user-menagment-page',
@@ -16,32 +16,34 @@ export class UserMenagmentPageComponent
   extends CommonComponent
   implements OnInit
 {
-  firstname: string;
-  lastname: string;
-  placeOfBirth: string;
-  password: string;
-  email: string;
-  dateOfBirth: string;
-
-  firstnameEmpty: boolean = false;
-  lastnameEmpty: boolean = false;
-  placeOfBirthEmpty: boolean = false;
-  passEmpty: boolean = false;
-  emailEmpty: boolean = false;
-  dateOfBirthEmpty: boolean;
-  roleEmpty: boolean;
   roles: Array<RoleResponse>;
   actionDone: boolean = false;
   actionStatus: boolean;
-
+  errorMesage: string;
   loading: boolean = true;
-  selectedRoleId: string;
   today = new Date();
 
+  nameRegex: RegExp = /^[A-Z][a-z]{3,19}$/;
+  passRegex: RegExp = /^(?=.*[A-Z])(?=.*\d).+$/;
+  emptyRole: boolean;
+
+  registerForm = this.fb.group({
+    firstname: ['', [Validators.pattern(this.nameRegex), Validators.required]],
+    lastname: ['', [Validators.pattern(this.nameRegex), Validators.required]],
+    placeOfBirth: [
+      '',
+      [Validators.pattern(this.nameRegex), Validators.required],
+    ],
+    password: ['', [Validators.pattern(this.passRegex), Validators.required]],
+    email: ['', [Validators.email, Validators.required]],
+    dateOfBirth: ['', Validators.required],
+    role: ['', Validators.required],
+  });
+  popUpRetrun: boolean;
   constructor(
-    private validate: ValidationService,
     private api: ApiService,
-    private popUp: CommonPopupService
+    private popUp: CommonPopupService,
+    private fb: FormBuilder
   ) {
     super();
   }
@@ -55,63 +57,42 @@ export class UserMenagmentPageComponent
 
   register() {
     this.actionDone = false;
-    this.firstnameEmpty = this.validate.validateStrings(this.firstname, 3);
-    this.lastnameEmpty = this.validate.validateStrings(this.lastname, 3);
-    this.placeOfBirthEmpty = this.validate.validateStrings(
-      this.placeOfBirth,
-      3
-    );
-    this.passEmpty = this.validate.validateStrings(this.password, 3);
-    this.emailEmpty = this.validate.validateStrings(this.email, 3);
-    this.dateOfBirthEmpty = this.validate.validateStrings(this.dateOfBirth, 8);
-    if (
-      this.firstnameEmpty ||
-      this.lastnameEmpty ||
-      this.placeOfBirthEmpty ||
-      this.passEmpty ||
-      this.emailEmpty ||
-      !this.selectedRoleId
-    ) {
+    if (this.registerForm.invalid) {
       return;
     }
     const regInfo = new RegisterInfo();
-    regInfo.firstName = this.firstname;
-    regInfo.lastName = this.lastname;
-    regInfo.placeOfBirth = this.placeOfBirth;
-    regInfo.dateOfBirth = this.dateOfBirth;
-    regInfo.email = this.email;
-    regInfo.password = this.password;
+    regInfo.firstName = this.registerForm.value.firstname;
+    regInfo.lastName = this.registerForm.value.lastname;
+    regInfo.placeOfBirth = this.registerForm.value.placeOfBirth;
+    regInfo.dateOfBirth = this.registerForm.value.dateOfBirth;
+    regInfo.email = this.registerForm.value.email;
+    regInfo.password = this.registerForm.value.password;
     regInfo.roles = [
       {
-        id: parseInt(this.selectedRoleId),
-        name: this.roles.find((x) => x.id === parseInt(this.selectedRoleId))
-          .name,
+        id: parseInt(this.registerForm.value.role),
+        name: this.roles.find(
+          (x) => x.id === parseInt(this.registerForm.value.role)
+        ).name,
       },
     ];
-    this.api.register(regInfo).subscribe((res) => {
-      this.actionStatus = res;
-      this.actionDone = true;
-    });
+    this.api
+      .register(regInfo)
+      .pipe(
+        catchError((x) => {
+          this.errorMesage = x.error.message;
+          console.log(x);
+          return of(false);
+        })
+      )
+      .subscribe((res: boolean) => {
+        this.actionStatus = res;
+        this.actionDone = true;
+      });
   }
   override canDeactivate(): Observable<boolean> {
-    let firstnameEmpty = this.validate.validateStrings(this.firstname, 3);
-    let lastnameEmpty = this.validate.validateStrings(this.lastname, 3);
-    let placeOfBirthEmpty = this.validate.validateStrings(this.placeOfBirth, 3);
-    let passEmpty = this.validate.validateStrings(this.password, 3);
-    let emailEmpty = this.validate.validateStrings(this.email, 3);
-    let dateOfBirthEmpty = this.validate.validateStrings(this.dateOfBirth, 8);
-    if (
-      firstnameEmpty &&
-      lastnameEmpty &&
-      placeOfBirthEmpty &&
-      passEmpty &&
-      emailEmpty &&
-      dateOfBirthEmpty &&
-      !this.selectedRoleId
-    ) {
+    if (!this.registerForm.touched || this.popUpRetrun) {
       return of(true);
     }
-
     return this.popUp
       .openPopup(
         'WARNING',
@@ -119,6 +100,7 @@ export class UserMenagmentPageComponent
       )
       .pipe(
         map((res) => {
+          this.popUpRetrun = res;
           return res;
         })
       );

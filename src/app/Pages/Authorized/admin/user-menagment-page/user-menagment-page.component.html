@@ -1,62 +1,84 @@
 <div class="wrapper">
   <h1>Register new user</h1>
   <div class="register">
-    <form class="register__form">
+    <form class="register__form" [formGroup]="registerForm">
       <span class="register__input">
         <mat-form-field appearance="fill">
           <mat-label>Firstname</mat-label>
-          <input matInput placeholder="Firstname" [(ngModel)]="firstname" name="firstname" />
+          <input matInput placeholder="Firstname" name="firstname" formControlName="firstname" />
         </mat-form-field>
-        <mat-error *ngIf="firstnameEmpty">
-          Firstname is <strong>empty or incorect</strong>
+        <mat-error *ngIf="registerForm.get('firstname').invalid && registerForm.get('firstname').touched">
+          Firstname is
+          <strong>
+            <span *ngIf="registerForm.get('firstname').hasError('required')">empty</span>
+            <span *ngIf="registerForm.get('firstname').hasError('pattern')">incorect</span>
+          </strong>
         </mat-error>
       </span>
       <span class="register__input">
         <mat-form-field appearance="fill">
           <mat-label>Lastname</mat-label>
-          <input matInput placeholder="Lastname" [(ngModel)]="lastname" name="lastname" />
+          <input matInput placeholder="Lastname" name="lastname" formControlName="lastname" />
         </mat-form-field>
-        <mat-error *ngIf="lastnameEmpty">
-          Lastname is <strong>empty or incorect</strong>
+        <mat-error *ngIf="registerForm.get('lastname').invalid && registerForm.get('lastname').touched">
+          Lastname is <strong>
+            <span *ngIf="registerForm.get('lastname').hasError('required')">empty</span>
+            <span *ngIf="registerForm.get('lastname').hasError('pattern')">incorect</span>
+          </strong>
         </mat-error>
       </span>
       <span class="register__input">
         <mat-form-field appearance="fill">
           <mat-label>Place of birth</mat-label>
-          <input matInput placeholder="Place of birth" [(ngModel)]="placeOfBirth" name="placeOfBirth" />
+          <input matInput placeholder="Place of birth" name="placeOfBirth" formControlName="placeOfBirth" />
         </mat-form-field>
-        <mat-error *ngIf="placeOfBirthEmpty">
-          Place of birth<strong>empty or incorect</strong>
+        <mat-error *ngIf="registerForm.get('placeOfBirth').invalid && registerForm.get('placeOfBirth').touched">
+          Place of birth
+          <strong>
+            <span *ngIf="registerForm.get('placeOfBirth').hasError('required')">empty</span>
+            <span *ngIf="registerForm.get('placeOfBirth').hasError('pattern')">incorect</span>
+          </strong>
         </mat-error>
       </span>
       <span class="register__input">
         <mat-form-field appearance="fill">
           <mat-label>Choose a date</mat-label>
-          <input matInput [matDatepicker]="picker" [max]="today" [(ngModel)]="dateOfBirth" name="date">
+          <input matInput [matDatepicker]="picker" [max]="today" name="date" formControlName="dateOfBirth">
           <mat-hint>MM/DD/YYYY</mat-hint>
           <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
           <mat-datepicker #picker></mat-datepicker>
         </mat-form-field>
-        <mat-error *ngIf="dateOfBirthEmpty">
-          Birthdate <strong>empty or incorect</strong>
+        <mat-error *ngIf="registerForm.get('dateOfBirth').invalid && registerForm.get('dateOfBirth').touched ">
+          Birthdate
+          <strong>
+            empty
+          </strong>
         </mat-error>
       </span>
       <span class="register__input">
         <mat-form-field appearance="fill">
           <mat-label>Password</mat-label>
-          <input matInput type="password" placeholder="Password" [(ngModel)]="password" name="password" />
+          <input matInput type="password" placeholder="Password" name="password" formControlName="password" />
         </mat-form-field>
-        <mat-error *ngIf="passEmpty">
-          Password is <strong>empty or incorect</strong>
+        <mat-error *ngIf="registerForm.get('password').invalid && registerForm.get('password').touched">
+          Password is
+          <strong>
+            <span *ngIf="registerForm.get('password').hasError('required')">empty</span>
+            <span *ngIf="registerForm.get('password').hasError('pattern')">incorect</span>
+          </strong>
         </mat-error>
       </span>
       <span class="register__input">
         <mat-form-field appearance="fill">
           <mat-label>Email</mat-label>
-          <input matInput placeholder="Email" [(ngModel)]="email" name="email" />
+          <input matInput placeholder="Email" name="email" formControlName="email" />
         </mat-form-field>
-        <mat-error *ngIf="emailEmpty">
-          Email is <strong>empty or incorect</strong>
+        <mat-error *ngIf="registerForm.get('email').invalid && registerForm.get('email').touched">
+          Email is
+          <strong>
+            <span *ngIf="registerForm.get('email').hasError('required')">empty</span>
+            <span *ngIf="registerForm.get('email').hasError('email')">incorect</span>
+          </strong>
         </mat-error>
       </span>
       <span class="register__input">
@@ -70,22 +92,25 @@
         </mat-form-field>
         <mat-form-field appearance="fill" *ngIf="!loading">
           <mat-label>Choose role</mat-label>
-          <mat-select [(ngModel)]="selectedRoleId" matSelect name="cassette">
+          <mat-select matSelect name="cassette" formControlName="role">
             <mat-option id="ignore-this" *ngFor="let role of roles" [value]="role.id">
               {{role.name}}
             </mat-option>
           </mat-select>
         </mat-form-field>
+        <mat-error *ngIf="registerForm.get('role').invalid && registerForm.get('role').touched">
+          Role is <strong>not selected</strong>
+        </mat-error>
       </span>
       <span class="register__button">
-        <button mat-stroked-button (click)="register()"> Register user</button>
+        <button mat-stroked-button (click)="register()" [disabled]="!registerForm.valid"> Register user</button>
       </span>
     </form>
     <h1 *ngIf="actionDone && actionStatus">
       Successful
     </h1>
     <h1 *ngIf="actionDone&& !actionStatus">
-      Something went wrong
+      {{errorMesage}}
     </h1>
   </div>
 

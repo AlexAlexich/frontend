@@ -1,3 +1,52 @@
-<div class="wrapper">
-  <h1>Welcome </h1>
+<div class="wrapper home">
+  <h1>Welcome {{ user?.fullName }}</h1>
+  <h2>Here at Videoteka you can rent tv shows and movies</h2>
+  <br />
+  <h4>
+    To rent movies, please contact an admin, and he will get back to you as soon
+    as possible!
+  </h4>
+  <h4 *ngIf="!moviesVisible">
+    To see list of rentable movies click
+    <span (click)="openMovies()">here</span>
+  </h4>
+  <div class="userinfo__movies" *ngIf="moviesVisible">
+    <app-loader *ngIf="loading"></app-loader>
+    <div *ngIf="!loading">
+      <div class="tableHeader">
+        <mat-form-field>
+          <mat-label>Filter</mat-label>
+          <input matInput placeholder="Movie name" #input (debounceInput)="filterMovies($event)" [time]="500" />
+        </mat-form-field>
+        <span (click)="closeMovies()"><mat-icon>close</mat-icon></span>
+      </div>
+
+      <div class="mat-elevation-z8">
+        <table mat-table [dataSource]="dataSource" matSort>
+          <ng-container matColumnDef="name">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>Name</th>
+            <td mat-cell *matCellDef="let row">{{ row.name }}</td>
+          </ng-container>
+
+          <ng-container matColumnDef="quantity">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>
+              Number of cassettes
+            </th>
+            <td mat-cell *matCellDef="let row">{{ row.quantity }}</td>
+          </ng-container>
+
+          <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+          <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+
+          <tr class="mat-row" *matNoDataRow>
+            <td class="mat-cell" colspan="4">
+              No data matching the filter "{{ input.value }}"
+            </td>
+          </tr>
+        </table>
+
+        <mat-paginator [pageSizeOptions]="[5, 10, 25, 100]" aria-label="Select page of cassettes"></mat-paginator>
+      </div>
+    </div>
+  </div>
 </div>

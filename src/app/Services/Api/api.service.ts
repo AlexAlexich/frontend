@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { LoginCredentials } from 'src/app/Models/Backend/LoginCredentials';
-import { Observable } from 'rxjs';
+import { map, Observable } from 'rxjs';
 import { LoginResponse } from 'src/app/Models/Backend/LoginResponse';
 import { User } from 'src/app/Models/Backend/User';
 import { RefreshTokenResponse } from 'src/app/Models/Backend/RefreshTokenResponse';
@@ -55,7 +55,21 @@ export class ApiService {
       email: regInfo.email,
       roles: regInfo.roles,
     });
-    return this.cacheService.executeAndDelete(API_KEY + USER, call);
+    return this.http
+      .post(API_KEY + REGISTER_USER, {
+        firstName: regInfo.firstName,
+        lastName: regInfo.lastName,
+        placeOfBirth: regInfo.placeOfBirth,
+        dateOfBirth: regInfo.dateOfBirth,
+        password: regInfo.password,
+        email: regInfo.email,
+        roles: regInfo.roles,
+      })
+      .pipe(
+        map((x) => {
+          return true;
+        })
+      );
   }
 
   sendRefreshToken(refreshToken: string): Observable<RefreshTokenResponse> {
@@ -65,8 +79,7 @@ export class ApiService {
   }
 
   getCurrentUser(): Observable<User> {
-    let call = this.http.get<User>(API_KEY + GET_CURRENT_USER);
-    return this.cacheService.get(API_KEY + GET_CURRENT_USER, call);
+    return this.http.get<User>(API_KEY + GET_CURRENT_USER);
   }
 
   getAllUsers(): Observable<Array<UserResponse>> {
@@ -102,20 +115,6 @@ export class ApiService {
       API_KEY + GET_ALL_CASSETTES,
       call
     );
-    // return this.http
-    //   .post(API_KEY + CREATE_CASSETE, {
-    //     id: 0,
-    //     name: casseteInfo.name,
-    //     quantity: casseteInfo.quantity,
-    //   })
-    //   .pipe(
-    //     map(() => {
-    //       return true;
-    //     }),
-    //     catchError(async () => {
-    //       return false;
-    //     })
-    //   );
   }
   updateCassete(casseteInfo: CreateCasseteModel): Observable<boolean> {
     let call = this.http.put(API_KEY + UPDATE_CASSETE + `/${casseteInfo.id}`, {
@@ -127,20 +126,6 @@ export class ApiService {
       API_KEY + GET_ALL_CASSETTES,
       call
     );
-    // return this.http
-    //   .put(API_KEY + UPDATE_CASSETE + `/${casseteInfo.id}`, {
-    //     id: casseteInfo.id,
-    //     name: casseteInfo.name,
-    //     quantity: casseteInfo.quantity,
-    //   })
-    //   .pipe(
-    //     map(() => {
-    //       return true;
-    //     }),
-    //     catchError(async () => {
-    //       return false;
-    //     })
-    //   );
   }
   returnCassette(returninfo: casseteActionInfo): Observable<boolean> {
     let call = this.http.post(API_KEY + RETURN_CASSETE, {
@@ -151,39 +136,18 @@ export class ApiService {
       API_KEY + GET_ALL_CASSETTES,
       call
     );
-    // return this.http
-    //   .post(API_KEY + RETURN_CASSETE, {
-    //     casseteId: returninfo.casseteId,
-    //     userId: returninfo.userId,
-    //   })
-    //   .pipe(
-    //     map(() => {
-    //       return true;
-    //     }),
-    //     catchError(async () => {
-    //       return false;
-    //     })
-    //   );
   }
   rentCassete(rentInfo: casseteActionInfo): Observable<boolean> {
-    let call = this.http.post(API_KEY + RENT_CASSETTE, {
-      casseteId: rentInfo.casseteId,
-      userId: rentInfo.userId,
-    });
-    return this.cacheService.executeAndDelete(
-      API_KEY + GET_ALL_CASSETTES,
-      call
-    );
-    // return this.http
-    //   .post(API_KEY + RENT_CASSETTE, {
-    //     casseteId: rentInfo.casseteId,
-    //     userId: rentInfo.userId,
-    //   })
-    //   .pipe(
-    //     map(() => {
-    //       return true;
-    //     })
-    //   );
+    return this.http
+      .post(API_KEY + RENT_CASSETTE, {
+        casseteId: rentInfo.casseteId,
+        userId: rentInfo.userId,
+      })
+      .pipe(
+        map(() => {
+          return true;
+        })
+      );
   }
 
   getRoles(): Observable<Array<RoleResponse>> {

@@ -52,7 +52,7 @@
     </div>
   </div>
 </div>
-<app-manage-cassete-sidenav [opened]="sidenavOpened" (clickedOutside)="changeOpenToFalse($event)">
+<app-manage-cassete-sidenav [opened]="sidenavOpened" (clickedOutside)="changeOpenToFalse()">
   <div *ngIf="shouldAdd" class="sidenav__content">
     <h1>Add</h1>
     <form>
@@ -83,13 +83,12 @@
         </mat-error>
       </span>
     </form>
-    <button (click)="createCassete()">Add</button>
+    <button class="button__action" (click)="createCassete()">Add</button>
   </div>
   <div *ngIf="shouldEdit" class="sidenav__content">
     <h1>Edit</h1>
     <form>
       <span>
-        Current name: {{cassette.name}}
         <mat-form-field appearance="fill">
           <mat-label>Cassette name </mat-label>
           <input matInput placeholder="Cassete name" [(ngModel)]="casseteName" name="casseteName" />
@@ -99,7 +98,6 @@
         </mat-error>
       </span>
       <span>
-        Current quantitiy :{{cassette.quantity}}
         <mat-form-field appearance="fill">
           <mat-label>Cassette quantity</mat-label>
           <input matInput placeholder="Cassete quantity" [(ngModel)]="casseteQuantity" name="casseteQuantity" />
@@ -117,6 +115,6 @@
         </mat-error>
       </span>
     </form>
-    <button (click)="editCassete()">Edit</button>
+    <button class="button__action" (click)="editCassete()">Edit</button>
   </div>
 </app-manage-cassete-sidenav>

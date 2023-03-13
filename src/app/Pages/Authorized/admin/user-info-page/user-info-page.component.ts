@@ -44,7 +44,6 @@ export class UserInfoPageComponent extends CommonComponent implements OnInit {
   idUser: number;
   displayedColumns: string[] = [
     'orderId',
-
     'name',
     'casseteId',
     'takeDate',
@@ -118,6 +117,10 @@ export class UserInfoPageComponent extends CommonComponent implements OnInit {
   }
 
   openSidenav(): void {
+    this.apiCallDone = false;
+    this.apiCallSuccesfull = false;
+    this.selectedValue = null;
+    this.errorMsgSidebar = null;
     this.sidenavOpened = true;
   }
   goBack(): void {
@@ -125,28 +128,35 @@ export class UserInfoPageComponent extends CommonComponent implements OnInit {
   }
 
   rentCassete(): void {
+    this.apiCallSuccesfull = false;
+    this.errorMsgSidebar = null;
     let rentInfo = new casseteActionInfo();
     rentInfo.casseteId = parseInt(this.selectedValue);
-    rentInfo.userId = this.user.id;
+    rentInfo.userId = this.idUser;
+    console.log(this.idUser);
     this.api
       .rentCassete(rentInfo)
       .pipe(
         mergeMap((res) => {
           this.apiCallSuccesfull = true;
-          return this.api.getCasseteByUserId(this.user.id);
+          return this.api.getCasseteByUserId(this.idUser);
         }),
         catchError((res) => {
-          this.errorMsgSidebar = res.error.message;
+          this.errorMsgSidebar = res.error.message
+            ? res.error.message
+            : res.message;
+          console.log(res);
           return res;
         })
       )
       .subscribe((res: Array<UserCassetteResposne>) => {
         this.dataSource.data = res;
+        this.selectedValue = null;
       });
   }
 
-  changeOpenedToFalse(res: boolean): void {
-    this.sidenavOpened = res;
+  changeOpenedToFalse(): void {
+    this.sidenavOpened = false;
   }
   filterCassete(filterValue: string): void {
     this.dataSource.filter;
@@ -159,12 +169,12 @@ export class UserInfoPageComponent extends CommonComponent implements OnInit {
   returnCassette(casseteId: number): void {
     let returnInfo = new casseteActionInfo();
     returnInfo.casseteId = casseteId;
-    returnInfo.userId = this.user.id;
+    returnInfo.userId = this.idUser;
     this.api
       .returnCassette(returnInfo)
       .pipe(
         mergeMap(() => {
-          return this.api.getCasseteByUserId(this.user.id);
+          return this.api.getCasseteByUserId(this.idUser);
         }),
         catchError((res) => {
           this.errorMsgSidebar = res.error.message;

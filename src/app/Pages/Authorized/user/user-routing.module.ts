@@ -16,6 +16,7 @@ const routes: Routes = [
       navigatePage: ConstService.user,
     },
     children: [
+      { path: '', redirectTo: ConstService.home, pathMatch: 'full' },
       {
         path: ConstService.home,
         component: HomeComponent,

@@ -48,15 +48,21 @@ export class CassetteMenagmentPageComponent
     super();
   }
   sidenavOpened = false;
-  changeOpenToFalse(res: boolean) {
-    this.sidenavOpened = res;
+  changeOpenToFalse() {
+    this.sidenavOpened = false;
   }
   openSidenav(openCase: string, cassete: CreateCasseteModel = null) {
+    this.actionDone = false;
+    this.actionStatus = false;
+    this.casseteName = null;
+    this.casseteQuantity = null;
     if (openCase === 'add') {
       this.shouldAdd = true;
       this.shouldEdit = false;
     } else {
       this.cassette = JSON.parse(JSON.stringify(cassete));
+      this.casseteName = JSON.parse(JSON.stringify(this.cassette.name));
+      this.casseteQuantity = JSON.parse(JSON.stringify(this.cassette.quantity));
       this.shouldAdd = false;
       this.shouldEdit = true;
     }
@@ -111,6 +117,12 @@ export class CassetteMenagmentPageComponent
     });
   }
   editCassete(): void {
+    if (this.cassette?.name && !this.casseteName) {
+      this.casseteName = JSON.parse(JSON.stringify(this.cassette.name));
+    }
+    if (this.cassette?.quantity && !this.casseteQuantity) {
+      this.casseteQuantity = this.cassette.quantity.toString();
+    }
     this.actionDone = false;
     this.casseteEmpty = this.validate.validateStrings(this.casseteName, 2);
     this.casseteQuantityEmpty = this.validate.validateNumbers(
@@ -127,8 +139,6 @@ export class CassetteMenagmentPageComponent
       this.actionStatus = res;
       this.actionDone = true;
       if (res) {
-        this.casseteName = null;
-        this.casseteQuantity = null;
         this.cassette = cassete;
         this.renderMovises();
       }

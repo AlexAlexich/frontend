@@ -1,0 +1,25 @@
+@import '../../../../assets/styles/variables';
+
+.tableHeader {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  flex-direction: row;
+
+  mat-icon {
+    justify-self: flex-end;
+  }
+}
+
+.home {
+  color: $retroBlue;
+
+  span {
+    color: $retroLightblue;
+
+    &:hover {
+      cursor: pointer;
+      color: $retroAqua;
+    }
+  }
+}
