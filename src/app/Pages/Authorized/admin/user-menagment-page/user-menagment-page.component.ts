@@ -25,6 +25,8 @@ export class UserMenagmentPageComponent
 
   nameRegex: RegExp = /^[A-Z][a-z]{3,19}$/;
   passRegex: RegExp = /^(?=.*[A-Z])(?=.*\d).+$/;
+  cityRegex: RegExp = /^[A-Z][a-z]{0,19}( [A-Z][a-z]{0,19})*$/;
+
   emptyRole: boolean;
 
   registerForm = this.fb.group({
@@ -32,7 +34,7 @@ export class UserMenagmentPageComponent
     lastname: ['', [Validators.pattern(this.nameRegex), Validators.required]],
     placeOfBirth: [
       '',
-      [Validators.pattern(this.nameRegex), Validators.required],
+      [Validators.pattern(this.cityRegex), Validators.required],
     ],
     password: ['', [Validators.pattern(this.passRegex), Validators.required]],
     email: ['', [Validators.email, Validators.required]],
@@ -86,7 +88,18 @@ export class UserMenagmentPageComponent
       )
       .subscribe((res: boolean) => {
         this.actionStatus = res;
+
         this.actionDone = true;
+        if (res) {
+          this.registerForm.reset();
+          this.registerForm.markAsUntouched();
+
+          Object.keys(this.registerForm.controls).forEach((key) => {
+            const control = this.registerForm.controls[key];
+
+            control.setErrors(null);
+          });
+        }
       });
   }
   override canDeactivate(): Observable<boolean> {
